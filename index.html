@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>GitHub Enterprise as the center of your project universe</title>
+
+		<meta name="description" content="Butler">
+		<meta name="author" content="David Dornseifer">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+
+					<p style="margin-top: -9cm;">
+					<h2>Docker / Containerization</h2>
+					</p>
+					<p>David Dornseifer <br>
+
+						ICN Innovation Engineering<br>
+						May 10th, 2016</p>
+
+				</section>
+
+				<section style="text-align: left;">
+					<h2>Agenda</h2>
+					<hr>
+					<ol>
+						<li>What is Containerization?</li>
+						<li>How does Containerization work?</li>
+						<li>How can I use it?</li>
+						<li>Demo</li>
+					</ol>
+				</section>
+
+				<section>
+					<section>
+					  <h2>What is Containerization and what is it with Docker?</h2>
+					</section>
+
+
+					<section>
+						<h2>Container vs. Virtualization</h2>
+						<img data-src="http://2eof2j3oc7is20vt9q3g7tlo5xe.wpengine.netdna-cdn.com/wp-content/uploads/2014/08/ibm-various-virtualization.jpg	">
+						<!--http://2eof2j3oc7is20vt9q3g7tlo5xe.wpengine.netdna-cdn.com/wp-content/uploads/2014/08/ibm-various-virtualization.jpg	-->
+
+						<aside class="notes">
+							<ul>
+							  <li>Faster Spinn up</li>
+								<li>Small footprint</li>
+							</ul>
+						</aside>
+					</section>
+
+
+
+					<section>
+						<h2>But how does it work?</h2>
+						<img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Docker-linux-interfaces.svg"/>
+					</section>
+
+					<section>
+						<h2>How is it used in the Cloud and why is it so popular</h2>
+						<ul>
+							<li>Immutable infrastructure (source)</li>
+							<li>Less overhead</li>
+							<li>Faster ...</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>The Docker Ecosystem</h2>
+						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/310204/images/1293298/ecosystem_support_2.png">
+					</section>
+				</section>
+
+					<!--
+					<section>
+						<h2>Overview of Computing Paradigms</h2>
+					</section>
+
+					<section>
+						<h2> Beside Docker there are ...</h2>
+						<ul>
+							<li>Spinacer</li>
+							<li>Kubanetes</li>
+							<li>Docker Swarm</li>
+							<li>Apache Mesos</li>
+						</ul>
+					</section>
+				-->
+
+
+				<section>
+					<section>
+					  <h2>How can I use it?</h2>
+					</section>
+
+					<section>
+						<h2>Dockerfile</h2>
+						<pre>
+							<code data-trim data-noescape>
+FROM python:3.5
+
+# copy SAP specific certs to make the SSL validation work
+ADD certificates /usr/local/share/ca-certificates/
+RUN update-ca-certificates
+
+# create directory for app
+RUN mkdir /app
+
+# install required python 3.5 libs
+COPY requirements.txt /app/
+RUN pip3 --proxy proxy.wdf.sap.corp:8080 install -r /app/requirements.txt
+
+# add handler for routes
+ADD handler /app/handler
+
+CMD python /app/app.py
+EXPOSE 8080
+							</code>
+						</pre>
+					</section>
+
+					<section>
+						<h2>The Base Image</h2>
+						<pre><code data-trim data-noescape>
+$ sudo debootstrap raring raring > /dev/null
+$ sudo tar -C raring -c . | docker import - raring
+a29c15f1bf7a
+$ docker run raring cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=13.04
+DISTRIB_CODENAME=raring
+DISTRIB_DESCRIPTION="Ubuntu 13.04"``
+						</code></pre>
+					</section>
+
+					<section>
+						<h2>Docker Compose</h2>
+						<pre>
+							<code data-trim data-noescape>
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+    volumes:
+     - .:/code
+    depends_on:
+     - redis
+  redis:
+    image: redis
+
+							</code>
+						</pre>
+					</section>
+			</section>
+
+			<section>
+				<section>
+				  <h2>Demo</h2>
+				</section>
+
+				<section>
+					<h2>The Terminal Interface</h2>
+					<pre>
+						<code data-trim data-noescape>
+> $ docker pull tensorflow/tensorflow:latest
+> $ docker run -p 8888:8888 -p 6006:6006 -it tensorflow/tensorflow:latest
+						</code>
+					</pre>
+
+
+				</section>
+
+				<section>
+					<h2>Integraion into IDE</h2>
+					<img src="images/docker-plugin.png"/>
+
+				</section>
+
+
+
+			</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+
+				// Open links in iframe
+				previewLinks: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				//minScale: 1,
+				//maxScale: 1,
+
+				// Parallax background image
+				//parallaxBackgroundImage: 'images/cq5dam.resized.HIGH.1.0_col.jpg', // e.g. "https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg"
+				// Parallax background size
+				//parallaxBackgroundSize: "1920px 1200px", // CSS syntax, e.g. "2100px 900px" - currently only pixels are supported (don't use % or auto)
+				// Amount of pixels to move the parallax background per slide step,
+				// a value of 0 disables movement along the given axis
+				// These are optional, if they aren't specified they'll be calculated automatically
+				//parallaxBackgroundHorizontal: 200,
+				//parallaxBackgroundVertical: 50,
+
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
