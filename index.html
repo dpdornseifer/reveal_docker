@@ -45,7 +45,7 @@
 				<section>
 
 					<p style="margin-top: -9cm;">
-					<h2>Docker / Containerization</h2>
+					<h2>Docker / Containerization in Application Development</h2>
 					</p>
 					<p>David Dornseifer <br>
 
@@ -65,9 +65,14 @@
 					</ol>
 				</section>
 
+
+
+				<!-- What is Containerization and what  -->
+
+
 				<section>
 					<section>
-					  <h2>What is Containerization and what is it with Docker?</h2>
+					  <h2>What is Containerization? / What is Docker?</h2>
 					</section>
 
 
@@ -85,20 +90,39 @@
 					</section>
 
 
-
 					<section>
 						<h2>But how does it work?</h2>
 						<img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Docker-linux-interfaces.svg"/>
+						<aside class="notes">
+							<ul>
+								<li>Dates back to year 2000</li>
+								<li>FreeBSD jails</li>
+								<li>Solaris Zones</li>
+								<li>OpenVZ</li>
+								<li>LXC (Linux Containers)</li>
+							</ul>
+
+						</aside>
 					</section>
+
 
 					<section>
 						<h2>How is it used in the Cloud and why is it so popular</h2>
 						<ul>
-							<li>Immutable infrastructure (source)</li>
+							<li>Immutable infrastructure (source) <br>
+								a.k.a immutable servers, phoenix servers
+								to avoid drift - differences between servers when they are supposed to be identical
+								containers can share directories, network stack ...
+
+							</li>
+
 							<li>Less overhead</li>
+							<li>Four to six times the number of server application instances compared to Xen, KVM (http://www.zdnet.com/article/what-is-docker-and-why-is-it-so-darn-popular/)</li>
 							<li>Faster ...</li>
+							<li>Flexibility to spin up whole integration testing environment</li>
 						</ul>
 					</section>
+
 
 					<section>
 						<h2>The Docker Ecosystem</h2>
@@ -106,23 +130,9 @@
 					</section>
 				</section>
 
-					<!--
-					<section>
-						<h2>Overview of Computing Paradigms</h2>
-					</section>
-
-					<section>
-						<h2> Beside Docker there are ...</h2>
-						<ul>
-							<li>Spinacer</li>
-							<li>Kubanetes</li>
-							<li>Docker Swarm</li>
-							<li>Apache Mesos</li>
-						</ul>
-					</section>
-				-->
 
 
+				<!-- ******************* How can I use it (Section) ******************* -->
 				<section>
 					<section>
 					  <h2>How can I use it?</h2>
@@ -212,6 +222,19 @@ services:
 					<img src="images/docker-plugin.png"/>
 
 				</section>
+
+
+
+				<section>
+					<h2> Large Scale Container Management</h2>
+					<ul>
+						<li>Spinacer (Netflix)</li>
+						<li>Kubanetes (Google)</li>
+						<li>Docker Swarm</li>
+						<li>Apache Mesos</li>
+					</ul>
+				</section>
+
 
 
 
