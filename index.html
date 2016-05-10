@@ -42,91 +42,128 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
-				<section>
+				<section data-background="images/docker-wallpaper-black.jpg">
 
-					<p style="margin-top: -9cm;">
-					<h2>Docker / Containerization in Application Development</h2>
+					<p style="margin-top: -10cm;">
+					<h2>Containerization in Application Development</h2>
 					</p>
-					<p>David Dornseifer <br>
-
-						ICN Innovation Engineering<br>
-						May 10th, 2016</p>
-
 				</section>
 
 				<section style="text-align: left;">
 					<h2>Agenda</h2>
 					<hr>
 					<ol>
-						<li>What is Containerization?</li>
+						<li>What is Containerization/Docker?</li>
 						<li>How does Containerization work?</li>
 						<li>How can I use it?</li>
-						<li>Demo</li>
+						<li>Handling</li>
 					</ol>
 				</section>
 
 
 
-				<!-- What is Containerization and what  -->
-
-
+				<!-- ******************* What is Containerization and what ******************* -->
 				<section>
 					<section>
-					  <h2>What is Containerization? / What is Docker?</h2>
+					  <h2>What is Containerization/Docker?</h2>
 					</section>
 
 
 					<section>
 						<h2>Container vs. Virtualization</h2>
-						<img data-src="http://2eof2j3oc7is20vt9q3g7tlo5xe.wpengine.netdna-cdn.com/wp-content/uploads/2014/08/ibm-various-virtualization.jpg	">
+						<!-- <img data-src="http://2eof2j3oc7is20vt9q3g7tlo5xe.wpengine.netdna-cdn.com/wp-content/uploads/2014/08/ibm-various-virtualization.jpg	">-->
+						<img src="images/container-vs-vm.jpg" width="120%"/>
 						<!--http://2eof2j3oc7is20vt9q3g7tlo5xe.wpengine.netdna-cdn.com/wp-content/uploads/2014/08/ibm-various-virtualization.jpg	-->
-
 						<aside class="notes">
 							<ul>
-							  <li>Faster Spinn up</li>
-								<li>Small footprint</li>
+								<li>Open Source</li>
+								<li>Modern kernels > 3.10</li>
+								<li>Old Redhat 2.6</li>
 							</ul>
 						</aside>
+
 					</section>
 
 
 					<section>
+						<h2>Docker Container?</h2>
+						<br>
+						dockerfile
+						<pre>
+							<code data-trim data-noescape>
+FROM ubuntu:12.04
+RUN apt-get update && apt-get install -y python python-pip curl
+RUN curl -sSL https://github.com/shykes/helloflask/archive/master.tar.gz | tar -xzv
+RUN cd helloflask-master && pip install -r requirements.txt</code>
+						</pre>
+
+						images (docker build)
+						<img src="images/docker-images.png" alt="" />
+
+					</section>
+
+					<section>
 						<h2>But how does it work?</h2>
-						<img src="https://upload.wikimedia.org/wikipedia/commons/0/09/Docker-linux-interfaces.svg"/>
+						<img src="images/docker-linux-interfaces.svg" width="60%"/>
 						<aside class="notes">
 							<ul>
+								<li>OS Host kernel (https://superuser.com/questions/889472/docker-containers-have-their-own-kernel-or-not)</li>
+								<li>http://www.slideshare.net/Docker/docker-lpc-2014cristian</li>
 								<li>Dates back to year 2000</li>
 								<li>FreeBSD jails</li>
 								<li>Solaris Zones</li>
 								<li>OpenVZ</li>
 								<li>LXC (Linux Containers)</li>
 							</ul>
-
 						</aside>
 					</section>
 
 
 					<section>
-						<h2>How is it used in the Cloud and why is it so popular</h2>
+						<h2>Why is it so popular?</h2>
+						<br>
 						<ul>
-							<li>Immutable infrastructure (source) <br>
-								a.k.a immutable servers, phoenix servers
-								to avoid drift - differences between servers when they are supposed to be identical
-								containers can share directories, network stack ...
-
-							</li>
-
-							<li>Less overhead</li>
-							<li>Four to six times the number of server application instances compared to Xen, KVM (http://www.zdnet.com/article/what-is-docker-and-why-is-it-so-darn-popular/)</li>
-							<li>Faster ...</li>
-							<li>Flexibility to spin up whole integration testing environment</li>
+							<li>OpenSource</li>
+							<li>Hardware- and platform-agnostic</li>
+							<li>Flexibility (e.g. spin up whole integration testing environment on your notebook)</li>
+							<li>Efficiency (four to six times the number of server application instances compared to Xen, KVM)</li>
 						</ul>
 					</section>
 
+					<section>
+						<h2>Why is it so popular?</h2>
+						<br>
+						<ul>
+							<li>Perfect for <b>immutable</b> infrastructure</li>
+							<li>Security (but not yet as good as BSD jails or real virtualization)</li>
+							<li>Take control back over your processes</li>
+						</ul>
+
+						<aside class="notes">
+							<ul>
+								<li>http://www.zdnet.com/article/what-is-docker-and-why-is-it-so-darn-popular/</li>
+								<li>a.k.a immutable servers, phoenix servers
+								to avoid drift - differences between servers when they are supposed to be identical
+								containers can share directories, network stack ...</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section>
+						<img src="images/docker-resources.png" width="60%" />
+					</section>
 
 					<section>
 						<h2>The Docker Ecosystem</h2>
-						<img data-src="https://s3.amazonaws.com/media-p.slid.es/uploads/310204/images/1293298/ecosystem_support_2.png">
+						<img data-src="images/ecosystem_support_2.png">
+						<aside class="notes">
+							<ul>
+								<li>Docker Hub</li>
+								<li>Platform</li>
+							</ul>
+
+						</aside>
+
 					</section>
 				</section>
 
@@ -167,7 +204,7 @@ EXPOSE 8080
 					<section>
 						<h2>The Base Image</h2>
 						<pre><code data-trim data-noescape>
-$ sudo debootstrap raring raring > /dev/null
+$ sudo <mark>debootstrap</mark> raring raring > /dev/null
 $ sudo tar -C raring -c . | docker import - raring
 a29c15f1bf7a
 $ docker run raring cat /etc/lsb-release
@@ -176,7 +213,18 @@ DISTRIB_RELEASE=13.04
 DISTRIB_CODENAME=raring
 DISTRIB_DESCRIPTION="Ubuntu 13.04"``
 						</code></pre>
+						<aside class="notes">
+							<ul>
+								<li>All databases</li>
+								<li>Runtime environments</li>
+							</ul>
+
+						</aside>
+
 					</section>
+
+
+
 
 					<section>
 						<h2>Docker Compose</h2>
@@ -194,25 +242,32 @@ services:
      - redis
   redis:
     image: redis
-
 							</code>
 						</pre>
 					</section>
+
+
+
 			</section>
 
 			<section>
 				<section>
-				  <h2>Demo</h2>
+				  <h2>Handling</h2>
 				</section>
 
 				<section>
 					<h2>The Terminal Interface</h2>
 					<pre>
 						<code data-trim data-noescape>
-> $ docker pull tensorflow/tensorflow:latest
-> $ docker run -p 8888:8888 -p 6006:6006 -it tensorflow/tensorflow:latest
+> <mark>$</mark> docker pull tensorflow/tensorflow:latest
+> <mark>$</mark> docker run -p 8888:8888 -p 6006:6006 -it tensorflow/tensorflow:latest
 						</code>
 					</pre>
+
+					images (docker build)
+					<img src="images/docker-images.png" alt="" />
+
+
 
 
 				</section>
@@ -225,20 +280,23 @@ services:
 
 
 
-				<section>
-					<h2> Large Scale Container Management</h2>
-					<ul>
-						<li>Spinacer (Netflix)</li>
-						<li>Kubanetes (Google)</li>
-						<li>Docker Swarm</li>
-						<li>Apache Mesos</li>
-					</ul>
-				</section>
-
-
-
-
 			</section>
+
+			<section>
+				<h2>Docker - The Answer to Life the Universe and Everything?</h2>
+					<img src="images/containership.jpg" alt="" />
+					<!-- http://www.slideshare.net/bridgetkromhout/docker-in-production-reality-not-hype-oscon-2015 -->
+					<aside class="notes">
+						<ul>
+							<li>A lot of complexity added</li>
+							<li>Not always easy to debug</li>
+							<li>Management in a large scale is a challenge</li>
+						</ul>
+
+					</aside>
+			</section>
+
+
 
 			</div>
 
